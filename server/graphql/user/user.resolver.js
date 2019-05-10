@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import constants from '../constants';
+import moment from 'moment';
 
 const { APP_SECRET } = constants;
 
@@ -17,8 +18,8 @@ export default {
         throw new Error('Invalid password');
       }
 
-      const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
+      // const token = jwt.sign({ userId: user.id }, APP_SECRET);
+      const token = moment('2019-05-10T18:12:26+04:00').isBetween('2019-05-10T18:10:26+04:00', '2019-05-10T18:13:26+04:00');
       return {
         token,
         user,

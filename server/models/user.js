@@ -8,8 +8,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     freezeTableName: true
   });
-  User.associate = function(models) {
-    // associations can be defined here
+  User.associate = function({Booking}) {
+    User.hasMany(Booking, {
+      foreignKey: {
+        name: 'userId',
+        allowNull: false,
+      },
+      as: 'bookings',
+      onUpdate: 'cascade',
+      onDelete: 'cascade',
+    });
   };
   return User;
 };
