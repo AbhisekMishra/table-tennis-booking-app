@@ -10,9 +10,9 @@ connectToDatabase();
 app.use(cors());
 app.get("/", async (req, res) => {
   try {
-    const user = await User.findById(1);
-    const response = { message: `This response came from the node.js app. User ${user.username} is on the database.` };
-    res.send(response);
+    // const user = await User.findById(1);
+    // const response = { message: `This response came from the node.js app. User ${user.username} is on the database.` };
+    // res.send(response);
   } catch (error) {
     res.status(422).send(error);
   }
@@ -31,19 +31,17 @@ function connectToDatabase() {
       idle: 10000,
     },
   });
-
   sequelize
     .authenticate()
     .then(() => {
       console.log("Connection has been established successfully.");
-
       //Check if database was seeded already, and do it if needed
       User.findById(1).then(user => {
         if (!user) {
           console.log("Database is not seeded, will run seeds now...");
           const { exec } = require("child_process");
           try {
-            exec("/opt/node_modules/.bin/sequelize db:seed:all", (err, stdout, stderr) => {
+            exec("./node_modules/.bin/sequelize db:seed:all", (err, stdout, stderr) => {
               if (err) {
                 console.log(err);
                 return;
