@@ -3,7 +3,8 @@ const app = express();
 const cors = require("cors");
 const Sequelize = require("sequelize");
 const dbConfig = require("./config/config.json").development;
-const User = require("./models").User;
+const apolloServer = require('./graphql').default;
+const appPort = 5000;
 
 connectToDatabase();
 
@@ -17,7 +18,7 @@ app.get("/", async (req, res) => {
     res.status(422).send(error);
   }
 });
-app.listen(5000, () => console.log("The node.js app is listening on port 5000."));
+app.listen(appPort, () => console.log(`The node.js app is listening on port ${appPort}.`));
 
 function connectToDatabase() {
   const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
@@ -34,29 +35,18 @@ function connectToDatabase() {
   sequelize
     .authenticate()
     .then(() => {
+      connectGraphQLServer();
       console.log("Connection has been established successfully.");
-      //Check if database was seeded already, and do it if needed
-      User.findById(1).then(user => {
-        if (!user) {
-          console.log("Database is not seeded, will run seeds now...");
-          const { exec } = require("child_process");
-          try {
-            exec("./node_modules/.bin/sequelize db:seed:all", (err, stdout, stderr) => {
-              if (err) {
-                console.log(err);
-                return;
-              }
-              console.log(stdout);
-            });
-          } catch (error) {
-            console.log("Error while seeding database: ", error);
-          }
-        } else {
-          console.log("Database already seeded.");
-        }
-      });
     })
     .catch(err => {
       console.log("Unable to connect to the database:", err);
     });
+}
+
+function connectGraphQLServer() {
+  // apolloServer.listen(apolloPort, () => console.log(`Apollo server is listening on port ${apolloPort}.`));
+  apolloServer.applyMiddleware({
+    app,
+    path: '/apollo',
+  });
 }
