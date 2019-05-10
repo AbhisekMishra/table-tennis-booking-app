@@ -10,7 +10,7 @@ const fields = `
 export default gql`
   extend type Query {
     login(username: String!, password: String!): AuthPayload
-    logout(token: String!, id: ID!): ID
+    logout(token: String!, id: Int!): Int
   }
 
   extend type Mutation {
@@ -27,7 +27,7 @@ export default gql`
   }
 
   type User {
-    id: ID!
+    id: Int!
     ${fields}
   }
 `;
