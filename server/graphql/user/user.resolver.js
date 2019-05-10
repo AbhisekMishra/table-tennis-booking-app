@@ -1,13 +1,42 @@
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import constants from '../constants';
+
+const { APP_SECRET } = constants;
+
 export default {
-    Query: {
-      userByUsernamePassword: async (_, { username, password }, { db }) => {
-        return await db.User.findOne({ where: { username, password } });
-      },
+  Query: {
+    login: async (_, { username, password }, { db }) => {
+      const user = await db.User.findOne({ where: { username } });
+      if (!user) {
+        throw new Error('No such user found');
+      }
+
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        throw new Error('Invalid password');
+      }
+
+      const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+      return {
+        token,
+        user,
+      }
     },
-    Mutation: {
-      createUser: async (_, { data }, { db }) => {
-        return await db.User.create(data);
-      },
+  },
+  Mutation: {
+    createUser: async (_, { data }, { db }) => {
+      console.log(data);
+      const password = await bcrypt.hash(data.password, 10);
+      const user = await db.User.create({ ...data, password });
+
+      const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
+      return {
+        token,
+        user,
+      }
     },
-  };
-  
+  },
+};

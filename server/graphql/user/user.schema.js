@@ -9,15 +9,21 @@ const fields = `
 
 export default gql`
   extend type Query {
-    userByUsernamePassword(username: String!, password: String!): User
+    login(username: String!, password: String!): AuthPayload
+    logout(token: String!, id: ID!): ID
   }
 
   extend type Mutation {
-    createUser(data: UserInput!): User
+    createUser(data: UserInput!): AuthPayload
   }
 
   input UserInput {
     ${fields}
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
   }
 
   type User {
