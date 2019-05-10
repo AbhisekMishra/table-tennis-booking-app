@@ -11,7 +11,8 @@ export default gql`
 
   extend type Mutation {
     book(data: BookingInput!): Booking
-    delete(id: Int!): Int
+    updateBooking(id: Int!, data: BookingInput!): Booking
+    deleteBooking(id: Int!): Int
   }
 
   input BookingInput {
@@ -20,6 +21,7 @@ export default gql`
 
   type Booking {
     id: Int!
+    createdAt: Date
     ${fields}
   }
 `;

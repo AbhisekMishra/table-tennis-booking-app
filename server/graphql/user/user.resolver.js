@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import constants from '../constants';
+import constants from '../../constants';
 
 const { APP_SECRET } = constants;
 

@@ -1,8 +1,8 @@
-import constants from '../constants';
-import { makeBooking } from '../../modules/booking';
+import { book, updateBooking } from '../../modules/booking';
 
 export default {
   Mutation: {
-    book: makeBooking,
+    book,
+    updateBooking,
   },
 };
