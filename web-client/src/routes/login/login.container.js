@@ -4,7 +4,6 @@ import Login from './login.component';
 
 const mapStateToProps = state => {
     return {
-        app: state,
         error: state.error,
     }
 }

@@ -9,6 +9,10 @@ const fields = `
 export default gql`
   scalar Date
 
+  extend type Query {
+    bookingsByUserId(userId: Int!): [Booking]
+  }
+
   extend type Mutation {
     book(data: BookingInput!): Booking
     updateBooking(id: Int!, data: BookingInput!): Booking

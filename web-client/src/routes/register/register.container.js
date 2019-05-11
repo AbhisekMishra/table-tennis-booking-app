@@ -4,7 +4,6 @@ import Register from './register.component';
 
 const mapStateToProps = state => {
     return {
-        app: state,
         error: state.error,
     }
 }

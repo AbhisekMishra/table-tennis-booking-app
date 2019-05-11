@@ -29,8 +29,7 @@ const styles = theme => ({
 });
 
 function Login(props) {
-    const { classes, loginUser, app, history } = props;
-    console.log('redux values-------->', app);
+    const { classes, loginUser, history } = props;
     return (
         <div className={classes.container}>
             <Grid container justify="center">

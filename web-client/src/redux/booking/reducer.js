@@ -1,14 +1,15 @@
 import types from './types'
 
 const initialState = {
-    token: "",
-    userData: {},
+  myBookings: [],
 };
 
 function booking(state = initialState, action) {
   switch (action.type) {
-    case types.SET_LOGIN_DATA:
-        return {...state, ...action.payload};
+    case types.SET_MY_BOOKINGS_DATA:
+      return { ...state, myBookings: action.payload };
+    case types.DELETE_BOOKING_DATA:
+      return { ...state, myBookings: state.myBookings.filter(booking => booking.id !== action.payload) };
     default:
       return state
   }
