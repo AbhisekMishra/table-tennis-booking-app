@@ -62,6 +62,7 @@ function Login(props) {
                                                 className={classes.textField}
                                                 margin="normal"
                                                 validate={value => {
+                                                    console.log(value);
                                                     if (!value) {
                                                         return 'Required';
                                                     }

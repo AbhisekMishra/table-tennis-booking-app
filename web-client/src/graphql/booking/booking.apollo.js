@@ -3,6 +3,7 @@ import apollo from '../../utils/apollo';
 import {
     bookingsByUserIdQuery,
     deleteBookingMutation,
+    updateBookingMutation,
 } from './booking.gql';
 
 const bookingsByUserId = (userId) =>
@@ -17,4 +18,10 @@ const deletebooking = (id) =>
         variables: { id },
     });
 
-export { bookingsByUserId, deletebooking };
+const updateBooking = (id, data) =>
+    apollo.mutate({
+        mutation: updateBookingMutation,
+        variables: { id, data },
+    });
+
+export { bookingsByUserId, deletebooking, updateBooking };

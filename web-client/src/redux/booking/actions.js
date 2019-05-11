@@ -1,5 +1,5 @@
 import types from './types';
-import { bookingsByUserId, deletebooking } from '../../graphql/booking/booking.apollo';
+import { bookingsByUserId, deletebooking, updateBooking } from '../../graphql/booking/booking.apollo';
 import { handleError } from '../error/actions';
 
 /*
@@ -56,4 +56,24 @@ const cancelBooking = (id) => {
     }
 }
 
-export { getBookingsByUser, cancelBooking };
+const updateBookingById = (id, data) => {
+  return (dispatch) => {
+      return updateBooking(id, data).then(res => {
+          if(res.data.booking) {
+            // dispatch(deleteBookingData(res.data.booking));
+            return true;
+          } else {
+            dispatch(handleError(res.errors[0].message));
+            return false;
+          }
+      }).catch(err => {
+        if(Array.isArray(err)) {
+          dispatch(handleError(err[0].message));
+        } else {
+          dispatch(handleError(err.message));
+        }
+      })
+    }
+}
+
+export { getBookingsByUser, cancelBooking, updateBookingById };

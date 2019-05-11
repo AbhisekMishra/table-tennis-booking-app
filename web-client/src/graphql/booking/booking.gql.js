@@ -3,10 +3,10 @@ import gql from 'graphql-tag';
 const bookingsByUserIdQuery = gql`
   query bookingsByUserId($userId: Int!) {
     bookings: bookingsByUserId(userId: $userId) {
-        id
-        startDate
-        endDate
-        createdAt
+      id
+      startDate
+      endDate
+      createdAt
     }
   }
 `;
@@ -17,4 +17,15 @@ const deleteBookingMutation = gql`
   }
 `;
 
-export { bookingsByUserIdQuery, deleteBookingMutation };
+const updateBookingMutation = gql`
+  mutation updateBooking($id: Int!, $data: BookingInput!) {
+    booking: updateBooking(id: $id, data: $data) {
+      id
+      startDate
+      endDate
+      createdAt
+    }
+  }
+`;
+
+export { bookingsByUserIdQuery, deleteBookingMutation, updateBookingMutation };

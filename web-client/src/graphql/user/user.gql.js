@@ -27,4 +27,5 @@ const createUserMutation = gql`
     }
   }
 `;
+
 export { loginQuery, createUserMutation };

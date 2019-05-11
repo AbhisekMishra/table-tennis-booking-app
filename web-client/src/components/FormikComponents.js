@@ -1,6 +1,7 @@
 import React from 'react';
 import { getIn } from 'formik';
 import TextField from '@material-ui/core/TextField';
+import {DateFormatInput, TimeFormatInput} from 'material-ui-next-pickers'
 
 const hasError = (form, field) =>
     form.touched[field.name] || getIn(form.touched, field.name)
@@ -25,6 +26,19 @@ const wrapComponentToFormik = (args, AntComponent) => {
     );
 };
 
-const ComponentInput = args => wrapComponentToFormik(args, TextField);
+const wrapPickersToFormik = (args, AntComponent) => {
+    const { field, form, ...props } = args;
+    return (
+        <AntComponent
+            {...field}
+            {...props}
+            error={getMessage(form, field)}
+        />
+    );
+};
 
-export { ComponentInput };
+const ComponentInput = args => wrapComponentToFormik(args, TextField);
+const ComponentDatePicker = args => wrapPickersToFormik(args, DateFormatInput);
+const ComponentTimePicker = args => wrapPickersToFormik(args, TimeFormatInput);
+
+export { ComponentInput, ComponentDatePicker, ComponentTimePicker };
