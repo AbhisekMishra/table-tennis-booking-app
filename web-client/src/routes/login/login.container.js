@@ -1,18 +1,23 @@
-// import { connect } from 'react-redux'
-// import { setUser, searchGistByUser } from '../../redux/actions';
+import { connect } from 'react-redux'
+import { loginUser } from '../../redux/user/actions';
 import Login from './login.component';
 
-// const mapStateToProps = state => {
-//   return {}
-// }
+const mapStateToProps = state => {
+    return {
+        app: state,
+        error: state.error,
+    }
+}
 
-// const mapDispatchToProps = dispatch => {
-//   return {}
-// }
+const mapDispatchToProps = dispatch => {
+    return {
+        loginUser: val => {
+            return dispatch(loginUser(val))
+        },
+    }
+}
 
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-//   )(Login);
-
-export default Login;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login);

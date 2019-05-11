@@ -4,8 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Formik, Field } from 'formik';
+import { ComponentInput } from '../../components/FormikComponents';
 
 const styles = theme => ({
     container: {
@@ -28,8 +29,8 @@ const styles = theme => ({
 });
 
 function Login(props) {
-    const { classes } = props;
-
+    const { classes, loginUser, app, history } = props;
+    console.log('redux values-------->', app);
     return (
         <div className={classes.container}>
             <Grid container justify="center">
@@ -38,30 +39,62 @@ function Login(props) {
                         <Typography variant="h5" component="h3" className={classes.header}>
                             Login
                         </Typography>
-                        <form noValidate autoComplete="off">
-                            <Grid container justify="center">
-                                <Grid item xs={12} sm={12} md={12}>
-                                    <TextField
-                                        label="Username"
-                                        className={classes.textField}
-                                        margin="normal"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={12}>
-                                    <TextField
-                                        label="Password"
-                                        type="password"
-                                        className={classes.textField}
-                                        margin="normal"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={12}>
-                                    <Button variant="contained" color="secondary" className={classes.button} type="submit">
-                                        Login
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </form>
+                        <Formik
+                            initialValues={{
+                                username: '',
+                                password: '',
+                            }}
+                            onSubmit={(values, { setSubmitting, resetForm, setErrors }) => {
+                                loginUser(values).then(success => {
+                                    if (success) {
+                                        history.push('register');
+                                    }
+                                    setSubmitting(false);
+                                });
+                            }}
+                            render={({ values, handleSubmit, isSubmitting, isValid }) => (
+                                <form noValidate autoComplete="off" onSubmit={handleSubmit} >
+                                    <Grid container justify="center">
+                                        <Grid item xs={12} sm={12} md={12}>
+                                            <Field
+                                                label="Username"
+                                                name="username"
+                                                component={ComponentInput}
+                                                className={classes.textField}
+                                                margin="normal"
+                                                validate={value => {
+                                                    if (!value) {
+                                                        return 'Required';
+                                                    }
+                                                    return null;
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={12}>
+                                            <Field
+                                                label="Password"
+                                                type="password"
+                                                name="password"
+                                                component={ComponentInput}
+                                                className={classes.textField}
+                                                margin="normal"
+                                                validate={value => {
+                                                    if (!value) {
+                                                        return 'Required';
+                                                    }
+                                                    return null;
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={12}>
+                                            <Button variant="contained" color="secondary" className={classes.button} type="submit" disabled={isSubmitting}>
+                                                Login
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </form>
+                            )}
+                        />
                     </Paper>
                 </Grid>
             </Grid>

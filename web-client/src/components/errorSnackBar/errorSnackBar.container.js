@@ -1,23 +1,18 @@
 import { connect } from 'react-redux'
-import { registerUser } from '../../redux/user/actions';
-import Register from './register.component';
+import ErrorSnackBar from './errorSnackBar.component';
 
 const mapStateToProps = state => {
     return {
-        app: state,
         error: state.error,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        registerUser: val => {
-            return dispatch(registerUser(val))
-        },
     }
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Register);
+)(ErrorSnackBar);
