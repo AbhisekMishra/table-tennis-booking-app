@@ -18,13 +18,16 @@ const styles = {
         marginLeft: -12,
         marginRight: 20,
     },
+    appBar: {
+        zIndex: '10000',
+    },
 };
 
 const Header = props => {
     const { classes } = props;
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                         <MenuIcon />
