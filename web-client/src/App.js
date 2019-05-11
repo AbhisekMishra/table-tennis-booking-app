@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './routes/login';
+import Register from './routes/register';
+import Header from './components/header';
 
 class App extends Component {
   constructor(props) {
@@ -9,15 +13,22 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/")
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ message: data.message });
-      });
+
   }
 
   render() {
-    return <div>{this.state.message}</div>;
+    return (
+      <Router>
+        <div>
+          <Header />
+          <Switch>
+            <Route exact path='/' component={Login} />
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+          </Switch>
+        </div>
+      </Router>
+    );
   }
 }
 
