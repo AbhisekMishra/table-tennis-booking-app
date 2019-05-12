@@ -1,25 +1,23 @@
-// import { connect } from './node_modules/react-redux'
-// import { loginUser } from '../../../redux/booking/actions';
+import { connect } from 'react-redux';
+import { makeBooking } from '../../../redux/booking/actions';
 import MakeBooking from './makeBooking.component';
 
-// const mapStateToProps = state => {
-//     return {
-//         app: state,
-//         error: state.error,
-//     }
-// }
+const mapStateToProps = state => {
+    return {
+        bookingInfo: state.booking.bookingInfo,
+        error: state.error,
+    }
+}
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         loginUser: val => {
-//             return dispatch(loginUser(val))
-//         },
-//     }
-// }
+const mapDispatchToProps = dispatch => {
+    return {
+        makeBooking: val => {
+            return dispatch(makeBooking(val))
+        },
+    }
+}
 
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(Book);
-
-export default MakeBooking;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MakeBooking);

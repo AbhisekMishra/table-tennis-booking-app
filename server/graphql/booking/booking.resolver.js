@@ -24,7 +24,7 @@ export default {
       return db.Booking.findAll({
         where: { userId }, 
         order: [
-          ['createdAt', 'DESC'],
+          ['endDate', 'DESC'],
         ],
       });
     },

@@ -28,4 +28,15 @@ const updateBookingMutation = gql`
   }
 `;
 
-export { bookingsByUserIdQuery, deleteBookingMutation, updateBookingMutation };
+const bookMutation = gql`
+  mutation book($data: BookingInput!) {
+    booking: book(data: $data) {
+      id
+      startDate
+      endDate
+      createdAt
+    }
+  }
+`;
+
+export { bookingsByUserIdQuery, deleteBookingMutation, updateBookingMutation, bookMutation };

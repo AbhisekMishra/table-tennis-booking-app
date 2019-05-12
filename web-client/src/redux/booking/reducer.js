@@ -2,6 +2,7 @@ import types from './types'
 
 const initialState = {
   myBookings: [],
+  bookingInfo: {},
 };
 
 function booking(state = initialState, action) {

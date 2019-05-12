@@ -36,8 +36,11 @@ class MakeBooking extends React.Component {
         startTime: undefined,
         endTime: undefined,
     };
+    getDerivedDate = (date, time) => {
+        return moment(`${moment(date).format('YYYY-MM-DD')} ${moment(time).format('h:mm:ss A')}`, 'YYYY-MM-DD h:mm:ss A').format();
+    }
     render() {
-        const { classes, loginUser, history } = this.props;
+        const { classes, makeBooking, history } = this.props;
         const { startDate, startTime, endTime } = this.state;
         return (
             <div className={classes.container}>
@@ -54,13 +57,16 @@ class MakeBooking extends React.Component {
                                     endTime,
                                 }}
                                 onSubmit={(values, { setSubmitting, resetForm, setErrors }) => {
-                                    console.log(values);
-                                    // loginUser(values).then(success => {
-                                    //     if (success) {
-                                    //         history.push('register');
-                                    //     }
+                                    const {startDate: startDateForm, startTime, endTime} = values;
+                                    const startDate = this.getDerivedDate(startDateForm, startTime);
+                                    const endDate = this.getDerivedDate(startDateForm, endTime);
+                                    const userId = 20;
+                                    makeBooking({startDate, endDate, userId}).then(success => {
+                                        if (success) {
+                                            history.push('register');
+                                        }
                                     setSubmitting(false);
-                                    // });
+                                    });
                                 }}
                                 render={({ values, handleSubmit, isSubmitting, isValid, setFieldValue, setFieldTouched }) => (
                                     <form noValidate autoComplete="off" onSubmit={handleSubmit} >
