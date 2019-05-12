@@ -16,6 +16,20 @@ const deleteBookingData = payload => ({
   payload,
 })
 
+const setBookingData = payload => ({
+  type: types.SET_BOOKING_DATA,
+  payload,
+})
+
+const setIsUpdating = payload => ({
+  type: types.SET_IS_UPDATING,
+  payload,
+})
+
+const clearBookingData = () => ({
+  type: types.CLEAR_BOOKING_DATA,
+})
+
 const getBookingsByUser = (userId) => {
   return (dispatch) => {
       return bookingsByUserId(userId).then(res => {
@@ -60,7 +74,8 @@ const updateBookingById = (id, data) => {
   return (dispatch) => {
       return updateBooking(id, data).then(res => {
           if(res.data.booking) {
-            // dispatch(deleteBookingData(res.data.booking));
+            dispatch(setIsUpdating(false));
+            dispatch(clearBookingData());
             return true;
           } else {
             dispatch(handleError(res.errors[0].message));
@@ -96,4 +111,4 @@ const makeBooking = (data) => {
     }
 }
 
-export { getBookingsByUser, cancelBooking, updateBookingById, makeBooking };
+export { getBookingsByUser, cancelBooking, updateBookingById, makeBooking, setBookingData, setIsUpdating };

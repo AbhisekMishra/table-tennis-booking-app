@@ -36,11 +36,20 @@ class MakeBooking extends React.Component {
         startTime: undefined,
         endTime: undefined,
     };
+    static getDerivedStateFromProps(props, state) {
+        const { bookingInfo, isUpdating } = props;
+        if (isUpdating) {
+            const { startDate, endDate } = bookingInfo;
+            return { startDate, startTime: startDate, endTime: endDate };
+        }
+        return {};
+    }
     getDerivedDate = (date, time) => {
         return moment(`${moment(date).format('YYYY-MM-DD')} ${moment(time).format('h:mm:ss A')}`, 'YYYY-MM-DD h:mm:ss A').format();
     }
     render() {
-        const { classes, makeBooking, history } = this.props;
+        console.log(this.props);
+        const { classes, makeBooking, history, isUpdating, bookingInfo, updateBookingById } = this.props;
         const { startDate, startTime, endTime } = this.state;
         return (
             <div className={classes.container}>
@@ -48,25 +57,34 @@ class MakeBooking extends React.Component {
                     <Grid item xs={12} sm={12} md={4}>
                         <Paper className={classes.root} elevation={1}>
                             <Typography variant="h5" component="h3" className={classes.header}>
-                                Book table
-                        </Typography>
+                                {isUpdating ? `Update Booking` : `Book table`}
+                            </Typography>
                             <Formik
                                 initialValues={{
-                                    startDate,
-                                    startTime,
-                                    endTime,
+                                    startDate: startDate ? new Date(startDate) : undefined,
+                                    startTime: startTime ? new Date(startTime) : undefined,
+                                    endTime: endTime ? new Date(endTime) : undefined,
                                 }}
                                 onSubmit={(values, { setSubmitting, resetForm, setErrors }) => {
-                                    const {startDate: startDateForm, startTime, endTime} = values;
+                                    const { startDate: startDateForm, startTime, endTime } = values;
                                     const startDate = this.getDerivedDate(startDateForm, startTime);
                                     const endDate = this.getDerivedDate(startDateForm, endTime);
                                     const userId = 20;
-                                    makeBooking({startDate, endDate, userId}).then(success => {
-                                        if (success) {
-                                            history.push('register');
-                                        }
-                                    setSubmitting(false);
-                                    });
+                                    if (!isUpdating) {
+                                        makeBooking({ startDate, endDate, userId }).then(success => {
+                                            if (success) {
+                                                history.push('/book');
+                                            }
+                                            setSubmitting(false);
+                                        });
+                                    } else {
+                                        updateBookingById(bookingInfo.id, { startDate, endDate, userId }).then(success => {
+                                            if (success) {
+                                                history.push('/book');
+                                            }
+                                            setSubmitting(false);
+                                        });
+                                    }
                                 }}
                                 render={({ values, handleSubmit, isSubmitting, isValid, setFieldValue, setFieldTouched }) => (
                                     <form noValidate autoComplete="off" onSubmit={handleSubmit} >
@@ -142,8 +160,8 @@ class MakeBooking extends React.Component {
                                             </Grid>
                                             <Grid item xs={12} sm={12} md={12}>
                                                 <Button variant="contained" color="secondary" className={classes.button} type="submit" disabled={isSubmitting}>
-                                                    Book
-                                            </Button>
+                                                    {isUpdating ? `Update` : `Book`}
+                                                </Button>
                                             </Grid>
                                         </Grid>
                                     </form>

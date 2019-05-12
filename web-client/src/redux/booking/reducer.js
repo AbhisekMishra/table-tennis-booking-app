@@ -3,6 +3,7 @@ import types from './types'
 const initialState = {
   myBookings: [],
   bookingInfo: {},
+  isUpdating: false,
 };
 
 function booking(state = initialState, action) {
@@ -11,6 +12,12 @@ function booking(state = initialState, action) {
       return { ...state, myBookings: action.payload };
     case types.DELETE_BOOKING_DATA:
       return { ...state, myBookings: state.myBookings.filter(booking => booking.id !== action.payload) };
+    case types.SET_BOOKING_DATA:
+      return {...state, bookingInfo: action.payload};
+    case types.SET_IS_UPDATING:
+      return {...state, isUpdating: action.payload};
+    case types.CLEAR_BOOKING_DATA:
+      return {...state, bookingInfo: {}};
     default:
       return state
   }

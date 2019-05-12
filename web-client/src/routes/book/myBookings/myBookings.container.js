@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getBookingsByUser, cancelBooking } from '../../../redux/booking/actions';
+import { getBookingsByUser, cancelBooking, setBookingData, setIsUpdating } from '../../../redux/booking/actions';
 import MyBookings from './myBookings.component';
 
 const mapStateToProps = state => {
@@ -16,6 +16,12 @@ const mapDispatchToProps = dispatch => {
         },
         cancelBooking: val => {
             return dispatch(cancelBooking(val))
+        },
+        setBookingData: val => {
+            return dispatch(setBookingData(val))
+        },
+        setIsUpdating: val => {
+            return dispatch(setIsUpdating(val))
         },
     }
 }

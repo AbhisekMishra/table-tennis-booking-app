@@ -4,15 +4,17 @@ import moment from 'moment';
 const { Op } = Sequelize;
 
 const book = async (_, { data }, { db }) => {
-    // Check if user has 
+    // Check if user has booked within 60 mins
     const bookingsByUser = await hasUserBookedWithinSixtyMinutes(db, data);
-    if(!bookingsByUser) {
+    if(bookingsByUser) {
         throw new Error('There should be a difference of 60 minutes between two of your bookings.');
     }
+    // Check if time slot difference is max of 60 mins
     const selectedTimeSlotsDifference = getSelectedTimeSlotsDifference(data);
     if(selectedTimeSlotsDifference) {
         throw new Error('Time slots should be between 10 - 60 mins.');
     }
+    // Check if time slot is available
     const bookingsInDateRange = await findBookingWithinDateRange(db, data);
     if (bookingsInDateRange.length > 0) {
         throw new Error('Selected time slot is not available.');
@@ -25,7 +27,7 @@ const updateBooking = async (_, { id, data }, { db }) => {
     if(!booking) {
         throw new Error('Booking ID not found');
     }
-    if(!checkIfWithinTwoMinutes(booking)) {
+    if(checkIfWithinTwoMinutes(booking)) {
         throw new Error('Booking can be only be updated within 2 minutes');
     }
     await booking.update(data);
@@ -43,6 +45,22 @@ const findBookingWithinDateRange = (db, data) => db.Booking.findAll({
             {
                 endDate: {
                     [Op.eq]: moment.utc(data.endDate).format(),
+                }
+            },
+            {
+                startDate: {
+                    [Op.lt]: moment.utc(data.startDate).format(),
+                },
+                endDate: {
+                    [Op.gt]: moment.utc(data.startDate).format(),
+                }
+            },
+            {
+                startDate: {
+                    [Op.lt]: moment.utc(data.endDate).format(),
+                },
+                endDate: {
+                    [Op.gt]: moment.utc(data.endDate).format(),
                 }
             },
             {
@@ -71,10 +89,10 @@ const hasUserBookedWithinSixtyMinutes = (db, data) => db.Booking.findAll({
     if(entries.length === 0) {
         return false;
     }
-    return moment.utc().diff(entries[0].createdAt, 'minutes') > 60;
+    return moment.utc().diff(entries[0].createdAt, 'minutes') <= 60;
 });
 
-const checkIfWithinTwoMinutes = (booking) => moment.utc().diff(booking.createdAt, "minutes") > 120;
+const checkIfWithinTwoMinutes = (booking) => moment.utc().diff(booking.createdAt, "minutes") > 2;
 
 const getSelectedTimeSlotsDifference = data => moment(data.endDate).diff(data.startDate, "minutes") > 60;
 

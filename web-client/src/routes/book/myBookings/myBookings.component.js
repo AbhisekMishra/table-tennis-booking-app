@@ -36,6 +36,11 @@ class MyBookings extends React.Component {
     handleDelete = (id) => {
         this.props.cancelBooking(id);
     }
+    handleEditBtnClick = (bookingData) => {
+        this.props.setIsUpdating(true);
+        this.props.setBookingData(bookingData);
+        this.props.history.push('/book/booking');
+    }
     render() {
         const { classes, myBookings } = this.props;
         return (
@@ -54,7 +59,7 @@ class MyBookings extends React.Component {
                                 </CardContent>
                                 <CardActions>
                                     {moment().isBefore(booking.startDate) && <Button variant="contained" color="secondary" onClick={() => this.handleDelete(booking.id)}>Cancel</Button>}
-                                    {moment().diff(booking.createdAt, "minutes") <= 120 && <Button variant="contained" color="primary">Edit</Button>}
+                                    {moment().diff(booking.createdAt, "minutes") <= 2 && <Button variant="contained" color="primary" onClick={() => this.handleEditBtnClick(booking)}>Edit</Button>}
                                 </CardActions>
                             </Card>
                         ))}
