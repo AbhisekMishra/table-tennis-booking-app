@@ -69,16 +69,15 @@ class MakeBooking extends React.Component {
                                     const { startDate: startDateForm, startTime, endTime } = values;
                                     const startDate = this.getDerivedDate(startDateForm, startTime);
                                     const endDate = this.getDerivedDate(startDateForm, endTime);
-                                    const userId = 20;
                                     if (!isUpdating) {
-                                        makeBooking({ startDate, endDate, userId }).then(success => {
+                                        makeBooking({ startDate, endDate }).then(success => {
                                             if (success) {
                                                 history.push('/book');
                                             }
                                             setSubmitting(false);
                                         });
                                     } else {
-                                        updateBookingById(bookingInfo.id, { startDate, endDate, userId }).then(success => {
+                                        updateBookingById(bookingInfo.id, { startDate, endDate }).then(success => {
                                             if (success) {
                                                 history.push('/book');
                                             }

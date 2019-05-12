@@ -32,33 +32,43 @@ const styles = theme => ({
     toolbar: theme.mixins.toolbar,
 });
 
-const Book = ({ match, classes, history }) => (
-    <div>
-        <Drawer
-            className={classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-        >
-            <div className={classes.toolbar} />
-            <List>
-                <ListItem button onClick={() => history.push('/book')}>
-                    <ListItemIcon><ListIcon /></ListItemIcon>
-                    <ListItemText primary='My Bookings' />
-                </ListItem>
-            </List>
-            <Divider />
-            <List>
-                <ListItem button onClick={() => history.push('/book/booking')}>
-                    <ListItemIcon><HttpsIcon /></ListItemIcon>
-                    <ListItemText primary='Make booking' />
-                </ListItem>
-            </List>
-        </Drawer>
-        <Route exact path={`${match.url}`} component={MyBookings} />
-        <Route path={`${match.url}/booking`} component={MakeBooking} />
-    </div>
-);
+class Book extends React.Component {
+    componentDidUpdate() {
+        if(!localStorage.getItem('authToken')) {
+            this.props.history.push('/');
+        }
+    }
+    render() {
+        const { match, classes, history } = this.props;
+        return (
+            <div>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <div className={classes.toolbar} />
+                    <List>
+                        <ListItem button onClick={() => history.push('/book')}>
+                            <ListItemIcon><ListIcon /></ListItemIcon>
+                            <ListItemText primary='My Bookings' />
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem button onClick={() => history.push('/book/booking')}>
+                            <ListItemIcon><HttpsIcon /></ListItemIcon>
+                            <ListItemText primary='Make booking' />
+                        </ListItem>
+                    </List>
+                </Drawer>
+                <Route exact path={`${match.url}`} component={MyBookings} />
+                <Route path={`${match.url}/booking`} component={MakeBooking} />
+            </div>
+        );
+    }
+}
 
 export default withStyles(styles)(Book);

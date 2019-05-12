@@ -33,8 +33,12 @@ const clearBookingData = () => ({
 const getBookingsByUser = () => {
   return (dispatch) => {
       return bookingsByUserId().then(res => {
-        dispatch(setMyBookingsData(res.data.bookings));
-        return true;
+        if(res.data.bookings) {
+          dispatch(setMyBookingsData(res.data.bookings));
+          return true;
+        } else {
+          dispatch(handleError(res.errors[0].message));
+        }
       }).catch(err => {
         console.log(err);
         if(Array.isArray(err)) {

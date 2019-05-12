@@ -1,36 +1,50 @@
 import Sequelize from 'sequelize';
 import moment from 'moment';
+import constants from '../../constants';
+import jwt from 'jsonwebtoken';
+
+const { APP_SECRET } = constants;
 
 const { Op } = Sequelize;
 
-const book = async (_, { data }, { db }) => {
+const book = async (_, { data }, { db, authToken }) => {
+    const { id } = jwt.verify(authToken, APP_SECRET);
+    if (!id) {
+        throw new Error('AUTH_ERROR');
+    }
+    const payload = {...data, userId: id};
     // Check if user has booked within 60 mins
-    const bookingsByUser = await hasUserBookedWithinSixtyMinutes(db, data);
-    if(bookingsByUser) {
+    const bookingsByUser = await hasUserBookedWithinSixtyMinutes(db, payload);
+    if (bookingsByUser) {
         throw new Error('There should be a difference of 60 minutes between two of your bookings.');
     }
     // Check if time slot difference is max of 60 mins
-    const selectedTimeSlotsDifference = getSelectedTimeSlotsDifference(data);
-    if(selectedTimeSlotsDifference) {
+    const selectedTimeSlotsDifference = getSelectedTimeSlotsDifference(payload);
+    if (selectedTimeSlotsDifference) {
         throw new Error('Time slots should be between 10 - 60 mins.');
     }
     // Check if time slot is available
-    const bookingsInDateRange = await findBookingWithinDateRange(db, data);
+    const bookingsInDateRange = await findBookingWithinDateRange(db, payload);
     if (bookingsInDateRange.length > 0) {
         throw new Error('Selected time slot is not available.');
     }
-    return db.Booking.create(data);
+    return db.Booking.create(payload);
 };
 
-const updateBooking = async (_, { id, data }, { db }) => {
-    const booking = await db.Booking.findOne({where: {id}});
-    if(!booking) {
+const updateBooking = async (_, { id, data }, { db, authToken }) => {
+    const { id: userId } = jwt.verify(authToken, APP_SECRET);
+    if (!id) {
+        throw new Error('AUTH_ERROR');
+    }
+    const payload = {...data, userId};
+    const booking = await db.Booking.findOne({ where: { id } });
+    if (!booking) {
         throw new Error('Booking ID not found');
     }
-    if(checkIfWithinTwoMinutes(booking)) {
+    if (checkIfWithinTwoMinutes(booking)) {
         throw new Error('Booking can be only be updated within 2 minutes');
     }
-    await booking.update(data);
+    await booking.update(payload);
     return booking;
 };
 
@@ -81,12 +95,12 @@ const findBookingWithinDateRange = (db, data) => db.Booking.findAll({
 
 const hasUserBookedWithinSixtyMinutes = (db, data) => db.Booking.findAll({
     limit: 1,
-    order: [ [ 'createdAt', 'DESC' ]],
+    order: [['createdAt', 'DESC']],
     where: {
         userId: data.userId,
     }
 }).then(entries => {
-    if(entries.length === 0) {
+    if (entries.length === 0) {
         return false;
     }
     return moment.utc().diff(entries[0].createdAt, 'minutes') <= 60;

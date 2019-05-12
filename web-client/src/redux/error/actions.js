@@ -15,6 +15,10 @@ const clearError = () => ({
 
 const handleError = (message) => {
   return (dispatch) => {
+    if(message === 'AUTH_ERROR') {
+      localStorage.removeItem('authToken');
+      // location.reload();
+    }
       dispatch(setError(message));
       setTimeout(() => {
         dispatch(clearError());

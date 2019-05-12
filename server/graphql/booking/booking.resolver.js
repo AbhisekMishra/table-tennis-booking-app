@@ -25,12 +25,12 @@ export default {
   },
   Query: {
     bookingsByUserId: async (_, { }, { db, authToken }) => {
-      const { userId } = jwt.verify(authToken, APP_SECRET);
-      if (!userId) {
+      const { id } = jwt.verify(authToken, APP_SECRET);
+      if (!id) {
         throw new Error('AUTH_ERROR');
       }
       return db.Booking.findAll({
-        where: { userId }, 
+        where: { userId: id }, 
         order: [
           ['endDate', 'DESC'],
         ],
