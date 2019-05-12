@@ -1,6 +1,6 @@
-# Docker MySQL Node Sequelize React boilerplate project
+# Table tennis booking app
 
-This is a boilerplate Docker project that:
+This project:
 
 1. Starts a MySQL server container based on the [official image](https://hub.docker.com/_/mysql/),
 2. Starts a [Node.js 10.8.0](https://hub.docker.com/_/node/) app that waits for the database to become responsive, and run all migrations and seeds if necessary,
@@ -29,4 +29,18 @@ If you change your Dockerfile and must rebuild the Node.js or React images, run:
 
 ```
 docker-compose up --build
+```
+
+To start server
+
+```
+cd server
+yarn start
+```
+
+To start client
+
+```
+cd web-client
+yarn start
 ```
