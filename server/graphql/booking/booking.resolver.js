@@ -1,4 +1,8 @@
 import { book, updateBooking } from '../../modules/booking';
+import constants from '../../constants';
+import jwt from 'jsonwebtoken';
+
+const { APP_SECRET } = constants;
 
 export default {
   Mutation: {
@@ -20,7 +24,11 @@ export default {
     },
   },
   Query: {
-    bookingsByUserId: async (_, { userId }, { db }) => {
+    bookingsByUserId: async (_, { }, { db, authToken }) => {
+      const { userId } = jwt.verify(authToken, APP_SECRET);
+      if (!userId) {
+        throw new Error('AUTH_ERROR');
+      }
       return db.Booking.findAll({
         where: { userId }, 
         order: [

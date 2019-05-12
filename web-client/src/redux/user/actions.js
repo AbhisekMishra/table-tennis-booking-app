@@ -10,11 +10,14 @@ const setLoginData = payload => ({
   payload,
 });
 
+const storeLoginTokenInLocalStorage = (token) => localStorage.setItem('authToken', token);
+
 const loginUser = ({username, password}) => {
   return (dispatch) => {
       return login(username, password).then(res => {
           if(res.data.loginData) {
             dispatch(setLoginData(res.data.loginData));
+            storeLoginTokenInLocalStorage(res.data.loginData.token);
             return true;
           } else {
             dispatch(handleError(res.errors[0].message));
@@ -35,6 +38,7 @@ const registerUser = (data) => {
       return createUser(data).then(res => {
           if(res.data.loginData) {
             dispatch(setLoginData(res.data.loginData));
+            storeLoginTokenInLocalStorage(res.data.loginData.token);
             return true;
           } else {
             dispatch(handleError(res.errors[0].message));

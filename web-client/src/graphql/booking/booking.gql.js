@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const bookingsByUserIdQuery = gql`
-  query bookingsByUserId($userId: Int!) {
-    bookings: bookingsByUserId(userId: $userId) {
+  query bookingsByUserId {
+    bookings: bookingsByUserId {
       id
       startDate
       endDate

@@ -17,6 +17,7 @@ const defaultOptions = {
 const authLink = setContext((_, { headers }) => ({
   headers: {
     ...headers,
+    AUTH_TOKEN: localStorage.getItem('authToken'),
   },
 }));
 

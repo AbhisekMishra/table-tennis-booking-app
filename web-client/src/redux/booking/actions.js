@@ -30,17 +30,13 @@ const clearBookingData = () => ({
   type: types.CLEAR_BOOKING_DATA,
 })
 
-const getBookingsByUser = (userId) => {
+const getBookingsByUser = () => {
   return (dispatch) => {
-      return bookingsByUserId(userId).then(res => {
-          if(res.data.bookings.length > 0) {
-            dispatch(setMyBookingsData(res.data.bookings));
-            return true;
-          } else {
-            dispatch(handleError(res.errors[0].message));
-            return false;
-          }
+      return bookingsByUserId().then(res => {
+        dispatch(setMyBookingsData(res.data.bookings));
+        return true;
       }).catch(err => {
+        console.log(err);
         if(Array.isArray(err)) {
           dispatch(handleError(err[0].message));
         } else {

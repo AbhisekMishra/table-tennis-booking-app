@@ -10,7 +10,7 @@ export default gql`
   scalar Date
 
   extend type Query {
-    bookingsByUserId(userId: Int!): [Booking]
+    bookingsByUserId: [Booking]
   }
 
   extend type Mutation {

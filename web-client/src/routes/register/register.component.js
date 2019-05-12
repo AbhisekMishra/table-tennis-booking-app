@@ -52,7 +52,7 @@ function Register(props) {
                                 delete registerData['rePassword'];
                                 registerUser(registerData).then(success => {
                                     if (success) {
-                                        history.push('login');
+                                        history.push('book');
                                     }
                                     setSubmitting(false);
                                 });

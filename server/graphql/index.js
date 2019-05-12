@@ -24,8 +24,6 @@ export default new ApolloServer({
     context: (params) => ({
         db,
         logger: params.req.log,
-        logErrors: (errors, logger) => {
-            (errors || []).forEach((err) => logger.error({ err }, 'Query failed'));
-        },
+        authToken: params.req.headers.auth_token
     }),
 });

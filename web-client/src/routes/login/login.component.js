@@ -46,7 +46,7 @@ function Login(props) {
                             onSubmit={(values, { setSubmitting, resetForm, setErrors }) => {
                                 loginUser(values).then(success => {
                                     if (success) {
-                                        history.push('register');
+                                        history.push('book');
                                     }
                                     setSubmitting(false);
                                 });

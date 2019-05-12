@@ -7,10 +7,10 @@ import {
     bookMutation,
 } from './booking.gql';
 
-const bookingsByUserId = (userId) =>
+const bookingsByUserId = () =>
     apollo.query({
         query: bookingsByUserIdQuery,
-        variables: { userId },
+        // variables: { userId },
     });
 
 const deletebooking = (id) =>
