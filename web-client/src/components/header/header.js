@@ -6,8 +6,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
+import { withRouter } from "react-router";
 
-const styles = {
+const styles = theme => ({
     root: {
         flexGrow: 1,
     },
@@ -21,10 +23,21 @@ const styles = {
     appBar: {
         zIndex: '10000',
     },
+    button: {
+        margin: theme.spacing.unit,
+    },
+});
+
+const handleLogoutClick = props => {
+    const { logoutUser, history } = props;
+    logoutUser();
+    history.push('/');
 };
 
 const Header = props => {
-    const { classes } = props;
+    console.log(props);
+    const { classes, logoutUser, userData } = props;
+    console.log(props);
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
@@ -34,7 +47,10 @@ const Header = props => {
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.grow}>
                         Table Tennis booking App
-            </Typography>
+                    </Typography>
+                    {userData.token && <Button color="secondary" className={classes.button} onClick={() => handleLogoutClick(props)}>
+                        Logout
+                    </Button>}
                 </Toolbar>
             </AppBar>
         </div>
@@ -45,4 +61,4 @@ Header.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(withRouter(Header));

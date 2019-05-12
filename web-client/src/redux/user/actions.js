@@ -10,6 +10,10 @@ const setLoginData = payload => ({
   payload,
 });
 
+const clearLoginData = () => ({
+  type: types.CLEAR_LOGIN_DATA,
+})
+
 const storeLoginTokenInLocalStorage = (token) => localStorage.setItem('authToken', token);
 
 const loginUser = ({username, password}) => {
@@ -30,6 +34,13 @@ const loginUser = ({username, password}) => {
           dispatch(handleError(err.message));
         }
       })
+    }
+}
+
+const logoutUser = () => {
+  return (dispatch) => {
+      localStorage.removeItem('authToken');
+      dispatch(clearLoginData())
     }
 }
 
@@ -54,4 +65,4 @@ const registerUser = (data) => {
     }
 }
 
-export { loginUser, registerUser };
+export { loginUser, registerUser, logoutUser };

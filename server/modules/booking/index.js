@@ -8,11 +8,14 @@ const { APP_SECRET } = constants;
 const { Op } = Sequelize;
 
 const book = async (_, { data }, { db, authToken }) => {
+    if (authToken === 'null') {
+        throw new Error('AUTH_ERROR');
+    }
     const { id } = jwt.verify(authToken, APP_SECRET);
     if (!id) {
         throw new Error('AUTH_ERROR');
     }
-    const payload = {...data, userId: id};
+    const payload = { ...data, userId: id };
     // Check if user has booked within 60 mins
     const bookingsByUser = await hasUserBookedWithinSixtyMinutes(db, payload);
     if (bookingsByUser) {
@@ -32,11 +35,14 @@ const book = async (_, { data }, { db, authToken }) => {
 };
 
 const updateBooking = async (_, { id, data }, { db, authToken }) => {
+    if (authToken === 'null') {
+        throw new Error('AUTH_ERROR');
+    }
     const { id: userId } = jwt.verify(authToken, APP_SECRET);
     if (!id) {
         throw new Error('AUTH_ERROR');
     }
-    const payload = {...data, userId};
+    const payload = { ...data, userId };
     const booking = await db.Booking.findOne({ where: { id } });
     if (!booking) {
         throw new Error('Booking ID not found');
