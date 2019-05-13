@@ -26,6 +26,9 @@ const styles = theme => ({
     header: {
         textAlign: 'center',
     },
+    signInSection: {
+        marginTop: '1rem',
+    },
 });
 
 function Login(props) {
@@ -89,6 +92,12 @@ function Login(props) {
                                         <Grid item xs={12} sm={12} md={12}>
                                             <Button variant="contained" color="secondary" className={classes.button} type="submit" disabled={isSubmitting}>
                                                 Login
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={12} className={classes.signInSection}>
+                                            <span>Not a member yet? </span>
+                                            <Button color="primary" onClick={() => history.push('register')}>
+                                                Sign In
                                             </Button>
                                         </Grid>
                                     </Grid>
