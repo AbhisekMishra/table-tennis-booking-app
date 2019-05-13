@@ -36,7 +36,7 @@ const handleLogoutClick = props => {
 
 const Header = props => {
     console.log(props);
-    const { classes, logoutUser, userData } = props;
+    const { classes, userData } = props;
     console.log(props);
     return (
         <div className={classes.root}>
